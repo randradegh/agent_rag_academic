@@ -408,6 +408,7 @@ with tab1:
                     vectorstore = cargar_vectorstore(articulo['id'])
                     if vectorstore:
                         st.session_state['vectorstore'] = vectorstore
+                        st.session_state['ultimo_articulo_url'] = articulo['url']
                         st.success("¡Artículo cargado exitosamente!")
     else:
         st.info("No hay artículos guardados")
@@ -421,6 +422,7 @@ with tab1:
                 vectorstore, vector_id = procesar_articulo(url)
                 if vectorstore and vector_id:
                     st.session_state['vectorstore'] = vectorstore
+                    st.session_state['ultimo_articulo_url'] = url
                     st.success("¡Artículo procesado y guardado exitosamente!")
             except Exception as e:
                 st.error(f"Error al procesar el artículo: {str(e)}")
@@ -476,10 +478,8 @@ with tab2:
                 
                 # Obtener URL del artículo
                 url_articulo = ""
-                for articulo in listar_articulos_guardados():
-                    if cargar_vectorstore(articulo['id']) == st.session_state['vectorstore']:
-                        url_articulo = articulo['url']
-                        break
+                if 'ultimo_articulo_url' in st.session_state:
+                    url_articulo = st.session_state['ultimo_articulo_url']
                 
                 # Guardar evaluación
                 df_actualizado = guardar_evaluacion(nombre_alumno, calificacion, resultado, url_articulo)
