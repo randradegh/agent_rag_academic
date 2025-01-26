@@ -18,16 +18,14 @@ from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.schema import Document
-from operator import itemgetter
 import os
 from dotenv import load_dotenv
 import nltk
 import magic
 import requests
 from bs4 import BeautifulSoup
-import time
+import time  # Necesario para NLTK
 import tempfile
-import hashlib
 import pandas as pd
 from datetime import datetime
 import re
@@ -218,6 +216,59 @@ with st.sidebar:
                     border-color: #999 !important;
                     background-color: #E8EAF1 !important;
                 }
+                /* Estilos mejorados para las pestañas en modo claro */
+                div[data-baseweb="tab-list"] {
+                    background-color: #f8f9fa !important;
+                    border-bottom: 2px solid #e9ecef !important;
+                }
+                button[data-baseweb="tab"] {
+                    background-color: #f8f9fa !important;
+                    color: #6c757d !important;
+                    border: none !important;
+                    border-bottom: 2px solid transparent !important;
+                    margin-right: 4px !important;
+                    padding: 8px 16px !important;
+                    font-weight: 500 !important;
+                }
+                button[data-baseweb="tab"]:hover {
+                    background-color: #e9ecef !important;
+                    color: #495057 !important;
+                }
+                button[data-baseweb="tab"][aria-selected="true"] {
+                    background-color: #ffffff !important;
+                    color: #FF4B4B !important;
+                    border-bottom: 2px solid #FF4B4B !important;
+                }
+                /* Resto de los estilos del modo claro */
+                button[data-baseweb="button"] {
+                    position: relative;
+                }
+                button[data-baseweb="button"]:hover::before {
+                    content: attr(aria-label);
+                    position: absolute;
+                    bottom: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 4px 8px;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    white-space: nowrap;
+                    z-index: 1000;
+                    text-shadow: none;
+                    font-weight: normal;
+                    letter-spacing: normal;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                }
+                button[data-baseweb="button"]:hover::after {
+                    content: "";
+                    position: absolute;
+                    bottom: 90%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    border-width: 5px;
+                }
                 /* Estilos para el tooltip en modo claro */
                 button[data-baseweb="button"] {
                     position: relative;
@@ -240,7 +291,6 @@ with st.sidebar:
                     letter-spacing: normal;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                 }
-                /* Flecha del tooltip */
                 button[data-baseweb="button"]:hover::after {
                     content: "";
                     position: absolute;
@@ -832,7 +882,12 @@ def setup_workflow():
 evaluation_workflow = setup_workflow()
 
 # Interfaz principal
-tab1, tab2, tab3, tab4 = st.tabs(["Subir Artículo", "Evaluar Tarea", "Listado de Evaluaciones", "Flujo de Agentes"])
+tab1, tab2, tab3, tab4 = st.tabs([
+    "📄 Subir Artículo",
+    "📝 Evaluar Tarea",
+    "📊 Listado de Evaluaciones",
+    "🤖 Flujo de Agentes"
+])
 
 with tab1:
     st.header("Subir Artículo de Referencia")
