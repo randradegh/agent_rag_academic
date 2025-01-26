@@ -1,0 +1,11 @@
+graph TD
+    start((__start__)) --> cargar_articulos
+    cargar_articulos[DocumentLoaderAgent] --> analizar_tarea
+    analizar_tarea[TaskAnalyzerAgent] --> evaluar_ensayo
+    evaluar_ensayo[EvaluationAgent] --> end((__end__))
+
+    style start fill:#f9f,stroke:#333,stroke-width:2px
+    style end fill:#f9f,stroke:#333,stroke-width:2px
+    style cargar_articulos fill:#bbf,stroke:#333,stroke-width:2px
+    style analizar_tarea fill:#bbf,stroke:#333,stroke-width:2px
+    style evaluar_ensayo fill:#bbf,stroke:#333,stroke-width:2px
