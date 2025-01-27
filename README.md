@@ -1,5 +1,15 @@
 # Sistema de Evaluación de Ensayos Académicos
 
+# 🦜🕸️LangGraph
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg?logo=python&logoColor=white)](https://www.python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.24+-FF4B4B.svg?logo=streamlit&logoColor=white)](https://streamlit.io)
+[![LangChain](https://img.shields.io/badge/LangChain-0.1.0-32CD32.svg?logo=chainlink&logoColor=white)](https://langchain.com)
+[![OpenAI](https://img.shields.io/badge/OpenAI-1.3.0-412991.svg?logo=openai&logoColor=white)](https://openai.com)
+[![LangGraph](https://img.shields.io/badge/LangGraph-0.0.13-4B0082.svg)](https://python.langchain.com/docs/langgraph)
+[![FAISS](https://img.shields.io/badge/FAISS-1.7.4-FB7299.svg)](https://github.com/facebookresearch/faiss)
+[![NLTK](https://img.shields.io/badge/NLTK-3.8.1-154F3F.svg)](https://www.nltk.org)
+[![Pandas](https://img.shields.io/badge/Pandas-2.1.0-150458.svg?logo=pandas&logoColor=white)](https://pandas.pydata.org)
+
 Este proyecto es una aplicación web desarrollada con Streamlit que utiliza Inteligencia Artificial para evaluar ensayos académicos contra artículos de referencia, proporcionando evaluaciones detalladas y calificaciones numéricas.
 
 ## Características Principales
