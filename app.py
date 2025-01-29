@@ -882,11 +882,13 @@ def setup_workflow():
 evaluation_workflow = setup_workflow()
 
 # Interfaz principal
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "📄 Subir Artículo",
     "📝 Evaluar Tarea",
     "📊 Listado de Evaluaciones",
-    "🤖 Flujo de Agentes"
+    "🤖 Flujo de Agentes",
+    "⚙️ Administración",
+    "❓ Ayuda"
 ])
 
 with tab1:
@@ -1035,3 +1037,233 @@ with tab4:
     """
     
     st.graphviz_chart(graph)
+
+with tab5:
+    st.header("⚙️ Administración del Sistema")
+    
+    # Contenedor principal con estilo
+    with st.container():
+        # Sección de Gestión de Artículos
+        st.markdown("""
+        <div style='background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>
+            <h3 style='color: #1f77b4; margin-bottom: 20px;'>🗂️ Gestión de Artículos</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if 'articulos_procesados' in st.session_state and st.session_state.articulos_procesados:
+            # Crear una lista de artículos con checkboxes
+            st.markdown("""
+                <p style='color: #666; font-size: 16px; margin-bottom: 20px;'>
+                    Selecciona los artículos que deseas ocultar de la lista activa. 
+                    Los artículos ocultos se mantendrán en el sistema pero no aparecerán en la lista de selección.
+                </p>
+            """, unsafe_allow_html=True)
+            
+            # Inicializar el estado de los artículos ocultos si no existe
+            if 'articulos_ocultos' not in st.session_state:
+                st.session_state.articulos_ocultos = set()
+            
+            # Contenedor con borde para la lista de artículos
+            st.markdown("""
+                <div style='border: 1px solid #ddd; border-radius: 5px; padding: 10px; margin-bottom: 20px;'>
+                """, unsafe_allow_html=True)
+            
+            for articulo in st.session_state.articulos_procesados:
+                col1, col2, col3 = st.columns([3, 1, 0.5])
+                with col1:
+                    st.markdown(f"""
+                        <div style='padding: 10px;'>
+                            <span style='font-weight: bold; color: #1f77b4;'>📑 {articulo['titulo']}</span>
+                            <br>
+                            <span style='color: #666; font-size: 0.9em;'>{articulo['url']}</span>
+                        </div>
+                    """, unsafe_allow_html=True)
+                with col2:
+                    st.markdown(f"""
+                        <div style='padding: 10px;'>
+                            <span style='color: #666; font-size: 0.9em;'>
+                                {articulo['fecha_procesado'].split('T')[0]}
+                            </span>
+                        </div>
+                    """, unsafe_allow_html=True)
+                with col3:
+                    if st.checkbox("🚫", key=f"hide_{articulo['id']}", 
+                                 value=articulo['id'] in st.session_state.articulos_ocultos,
+                                 help="Ocultar artículo"):
+                        st.session_state.articulos_ocultos.add(articulo['id'])
+                    else:
+                        st.session_state.articulos_ocultos.discard(articulo['id'])
+            
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+            # Botón para aplicar cambios con estilo
+            col1, col2, col3 = st.columns([2, 2, 2])
+            with col2:
+                if st.button("💾 Aplicar Cambios", use_container_width=True):
+                    st.session_state.articulos_procesados = [
+                        art for art in st.session_state.articulos_procesados
+                        if art['id'] not in st.session_state.articulos_ocultos
+                    ]
+                    st.success("✅ Lista de artículos actualizada")
+                    st.rerun()
+        else:
+            st.info("📭 No hay artículos para gestionar")
+    
+    # Separador visual
+    st.markdown("<hr style='margin: 30px 0; border: none; height: 1px; background-color: #ddd;'>", unsafe_allow_html=True)
+    
+    # Sección de Depuración de Evaluaciones
+    st.markdown("""
+    <div style='background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;'>
+        <h3 style='color: #dc3545; margin-bottom: 20px;'>🗑️ Depuración de Evaluaciones</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Cargar evaluaciones
+    df = cargar_evaluaciones()
+    
+    if not df.empty:
+        st.markdown("""
+            <p style='color: #666; font-size: 16px; margin-bottom: 20px;'>
+                Selecciona las evaluaciones que deseas eliminar permanentemente del sistema.
+                Esta acción no se puede deshacer.
+            </p>
+        """, unsafe_allow_html=True)
+        
+        # Crear un DataFrame temporal para manejar las eliminaciones
+        if 'evaluaciones_a_eliminar' not in st.session_state:
+            st.session_state.evaluaciones_a_eliminar = set()
+        
+        # Contenedor con borde para la lista de evaluaciones
+        st.markdown("""
+            <div style='border: 1px solid #ddd; border-radius: 5px; padding: 10px; margin-bottom: 20px;'>
+        """, unsafe_allow_html=True)
+        
+        for idx, row in df.iterrows():
+            col1, col2, col3, col4 = st.columns([2, 1, 1, 0.5])
+            with col1:
+                st.markdown(f"""
+                    <div style='padding: 10px;'>
+                        <span style='font-weight: bold; color: #1f77b4;'>👤 {row['nombre_alumno']}</span>
+                    </div>
+                """, unsafe_allow_html=True)
+            with col2:
+                st.markdown(f"""
+                    <div style='padding: 10px;'>
+                        <span style='color: #666;'>{row['fecha'].split()[0]}</span>
+                    </div>
+                """, unsafe_allow_html=True)
+            with col3:
+                st.markdown(f"""
+                    <div style='padding: 10px;'>
+                        <span style='color: {"#28a745" if row['calificacion'] >= 7 else "#dc3545"}; font-weight: bold;'>
+                            {row['calificacion']:.1f}
+                        </span>
+                    </div>
+                """, unsafe_allow_html=True)
+            with col4:
+                if st.checkbox("🗑️", key=f"del_eval_{idx}",
+                             help="Eliminar evaluación"):
+                    st.session_state.evaluaciones_a_eliminar.add(idx)
+                else:
+                    st.session_state.evaluaciones_a_eliminar.discard(idx)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        # Botón para aplicar eliminaciones con estilo
+        col1, col2, col3 = st.columns([2, 2, 2])
+        with col2:
+            if st.button("🗑️ Eliminar Seleccionadas", type="primary", use_container_width=True):
+                # Eliminar las evaluaciones seleccionadas
+                df_actualizado = df.drop(list(st.session_state.evaluaciones_a_eliminar))
+                # Guardar el DataFrame actualizado
+                df_actualizado.to_csv("evaluaciones.csv", index=False)
+                st.session_state.evaluaciones_a_eliminar = set()  # Limpiar selección
+                st.success("✅ Evaluaciones eliminadas correctamente")
+                st.rerun()
+    else:
+        st.info("📭 No hay evaluaciones para depurar")
+
+with tab6:
+    st.title("📚 Guía de Uso del Sistema")
+    
+    # Introducción
+    st.header("🎯 Objetivo del Sistema")
+    st.write("""
+    Este sistema está diseñado para evaluar ensayos académicos de forma automatizada, 
+    comparándolos con artículos de referencia y proporcionando una evaluación detallada 
+    y una calificación objetiva.
+    """)
+    
+    # Explicación de cada pestaña
+    st.header("📑 Pestañas del Sistema")
+    
+    with st.expander("📄 Subir Artículo", expanded=True):
+        st.write("""
+        - Ingresa la URL del artículo académico de referencia
+        - El sistema procesará y almacenará el contenido para su uso posterior
+        - Puedes subir múltiples artículos para una evaluación más completa
+        """)
+    
+    with st.expander("📝 Evaluar Tarea", expanded=True):
+        st.write("""
+        - Sube el archivo PDF del ensayo a evaluar
+        - El sistema identificará automáticamente al estudiante
+        - Se generará una evaluación detallada y una calificación
+        - **Importante**: Selecciona los artículos de referencia en el sidebar antes de evaluar
+        """)
+    
+    with st.expander("📊 Listado de Evaluaciones", expanded=True):
+        st.write("""
+        - Visualiza todas las evaluaciones realizadas
+        - Accede a los detalles completos de cada evaluación
+        - Organizado por fecha y nombre del estudiante
+        """)
+    
+    with st.expander("🤖 Flujo de Agentes", expanded=True):
+        st.write("""
+        - Visualiza el proceso interno de evaluación
+        - Comprende cómo interactúan los diferentes componentes
+        - Conoce el flujo de trabajo del sistema
+        """)
+    
+    with st.expander("⚙️ Administración", expanded=True):
+        st.write("""
+        - Gestiona los artículos de referencia activos
+        - Oculta artículos que no necesites temporalmente
+        - Elimina evaluaciones anteriores del sistema
+        """)
+    
+    # Flujo de trabajo recomendado
+    st.header("🔄 Flujo de Trabajo Recomendado")
+    
+    col1, col2 = st.columns([1, 2])
+    with col1:
+        st.write("**Paso 1**")
+        st.write("**Paso 2**")
+        st.write("**Paso 3**")
+        st.write("**Paso 4**")
+        st.write("**Paso 5**")
+    
+    with col2:
+        st.write("Sube los artículos de referencia que necesites")
+        st.write("Selecciona los artículos relevantes en el sidebar")
+        st.write("Sube el ensayo a evaluar en formato PDF")
+        st.write("Revisa la evaluación generada")
+        st.write("Guarda la evaluación si estás conforme")
+    
+    # Tips Importantes
+    st.header("💡 Tips Importantes")
+    
+    st.info("""
+    - Asegúrate de que los PDFs estén correctamente formateados
+    - Selecciona artículos de referencia relevantes para el tema del ensayo
+    - Puedes ocultar artículos no relevantes temporalmente sin eliminarlos
+    - Revisa las evaluaciones antes de guardarlas
+    """)
+    
+    # Nota sobre el sistema
+    st.warning("""
+    **Nota**: El sistema utiliza inteligencia artificial para realizar las evaluaciones. 
+    Aunque es muy preciso, siempre es recomendable revisar los resultados antes de guardarlos.
+    """)
