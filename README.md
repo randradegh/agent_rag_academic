@@ -30,6 +30,18 @@ Este proyecto es una aplicación web desarrollada con Streamlit que utiliza Inte
 - Historial de evaluaciones
 - Interfaz intuitiva para revisión
 
+### Administración del Sistema
+- Gestión dinámica de artículos de referencia
+- Ocultamiento temporal de artículos no necesarios
+- Depuración selectiva de evaluaciones
+- Interfaz intuitiva para mantenimiento
+
+### Sistema de Ayuda
+- Guía detallada de uso del sistema
+- Explicación de cada componente
+- Flujo de trabajo recomendado
+- Tips y mejores prácticas
+
 ## Arquitectura del Sistema
 
 ### Agentes de IA
@@ -83,18 +95,33 @@ El sistema sigue un flujo de trabajo dirigido:
 
 ## Uso
 
-1. **Subir Artículos de Referencia**
+1. **📄 Subir Artículos de Referencia**
    - Ingresar URL del artículo
    - El sistema procesará y almacenará el contenido
 
-2. **Evaluar Ensayos**
+2. **📝 Evaluar Ensayos**
    - Subir el PDF del ensayo
    - El sistema identificará al estudiante
    - Se generará una evaluación detallada
 
-3. **Revisar Evaluaciones**
+3. **📊 Revisar Evaluaciones**
    - Acceder al historial de evaluaciones
    - Ver detalles y calificaciones
+
+4. **🤖 Visualizar Flujo de Agentes**
+   - Comprender el proceso interno
+   - Ver la interacción entre agentes
+   - Entender el flujo de trabajo
+
+5. **⚙️ Administrar Sistema**
+   - Gestionar artículos de referencia
+   - Ocultar/mostrar artículos según necesidad
+   - Depurar evaluaciones antiguas
+
+6. **❓ Consultar Ayuda**
+   - Acceder a la guía completa
+   - Ver flujo de trabajo recomendado
+   - Consultar tips y mejores prácticas
 
 ## Estructura del Proyecto
 ```
